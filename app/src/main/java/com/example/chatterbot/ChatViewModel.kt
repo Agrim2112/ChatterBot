@@ -20,13 +20,13 @@ class ChatViewModel: ViewModel() {
         when(event){
             is ChatUIEvent.sendPrompt -> {
                 if(event.prompt.isNotEmpty()){
-                    addPrompt(event.prompt,event.bitmap)
-
                     if(event.bitmap!=null){
                         getResponseWithImage(event.prompt,event.bitmap)
+                        addPrompt(event.prompt,event.bitmap)
                     }
                     else{
                         getResponse(event.prompt)
+                        addPrompt(event.prompt,null)
                     }
                 }
             }

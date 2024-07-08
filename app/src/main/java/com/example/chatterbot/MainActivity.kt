@@ -1,6 +1,7 @@
 package com.example.chatterbot
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -34,6 +35,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AddAPhoto
 import androidx.compose.material.icons.rounded.CopyAll
 import androidx.compose.material.icons.rounded.Send
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -308,18 +310,45 @@ class MainActivity : ComponentActivity() {
                     color = White
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Icon(
+                Row (
                     modifier = Modifier
-                        .size(25.dp)
-                        .clickable {
-                            val clipData = android.content.ClipData.newPlainText("label", response)
-                            clipboardManager.setPrimaryClip(clipData)
-                            Toast.makeText(applicationContext, "Copied to Clipboard", Toast.LENGTH_SHORT).show()
-                        },
-                    imageVector = Icons.Rounded.CopyAll,
-                    contentDescription ="Copy",
-                    tint = Gray,
+                        .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 0.7f)
+                ){
+                    Icon(
+                        modifier = Modifier
+                            .size(25.dp)
+                            .clickable {
+                                val clipData =
+                                    android.content.ClipData.newPlainText("label", response)
+                                clipboardManager.setPrimaryClip(clipData)
+                                Toast
+                                    .makeText(
+                                        applicationContext,
+                                        "Copied to Clipboard",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                    .show()
+                            },
+                        imageVector = Icons.Rounded.CopyAll,
+                        contentDescription = "Copy",
+                        tint = Gray,
                     )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Icon(
+                        modifier = Modifier
+                            .size(25.dp)
+                            .clickable {
+                                val intent = Intent(Intent.ACTION_SEND)
+                                intent.setType("text/plain")
+                                intent.putExtra(Intent.EXTRA_TEXT,response)
+                                intent.putExtra(Intent.EXTRA_HTML_TEXT,response)
+                                startActivity(Intent.createChooser(intent,"Share via"))
+                            },
+                        imageVector = Icons.Rounded.Share,
+                        contentDescription = "Copy",
+                        tint = Gray,
+                    )
+                }
             }
         }
     }
